@@ -15,6 +15,8 @@ import {
   Text,
   Easing,
   ViewPropTypes,
+  StatusBar,
+  Platform
 } from 'react-native';
 import PropTypes from 'prop-types';
 import invariant from 'invariant';
@@ -150,7 +152,6 @@ class PopoverTooltip extends React.PureComponent<Props, State> {
   }
 
   onPressItem = (userCallback: () => void) => {
-    this.toggle();
     userCallback();
   }
 
@@ -343,7 +344,8 @@ class PopoverTooltip extends React.PureComponent<Props, State> {
           <Animated.View style={{
             position: 'absolute',
             left: this.state.x,
-            top: this.state.y,
+            top: Platform.OS === 'android' && this.state.isModalOpen
+              ? this.state.y - StatusBar.currentHeight : this.state.y,
             width: this.state.width,
             height: this.state.height,
             backgroundColor: 'transparent',
