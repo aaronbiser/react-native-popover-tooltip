@@ -1,8 +1,22 @@
+# Why was this forked?
+
+I forked this in order to make some key adjustments for a specific use. I needed to add more content to the tooltip then just a list and needed to remove the onPress event from the entire tooltip wrapper.
+
+Here's what changed:
+• I removed the onPress event and TouchableOpacity from the popup wrapper
+• Added positioning adjustments for Android to account for StatusBar misalignment issues (WIP)
+
+Future updates will include:
+• Alignment options (Left and Right alignment)
+• Click to expand QR code to Full Screen
+
+
 # react-native-tooltip-menu
 
 Currently works only with `iOS` and `Android`.
 
 This component is modified from another project [react-native-tooltip-menu](https://github.com/alimek/react-native-tooltip-menu)
+
 
 # How to install
 
@@ -188,7 +202,7 @@ class App extends React.Component {
 | componentWrapperStyle | Object | Optional | Style `Object` if you want to overwrite wrapper for your `buttonComponent`
 | componentContainerStyle | Object | Optional | Style `Object` if you want to overwrite container that is between wrapper and your `buttonComponent`
 | overlayStyle | Object | Optional | Style `Object` if you want to overwrite overlay style's.
-| onRequestClose | `function` | Optional, default `() => {}` | Modal onRequestClose required function on Android 
+| onRequestClose | `function` | Optional, default `() => {}` | Modal onRequestClose required function on Android
 | labelContainerStyle | `Object` | Optional | Style `Object` if you want to change default `TooltipMenuItem` View's style.
 | tooltipContainerStyle | `Object` | Optional | Style of the container of the entire tooltip menu.
 | labelStyle | `Object` | Optional | Style `Object` if you want to change default `TooltipMenuItem` Text's style.
