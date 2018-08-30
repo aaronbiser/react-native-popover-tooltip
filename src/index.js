@@ -34,7 +34,7 @@ type Props = {
   overlayStyle?: StyleObj,
   tooltipContainerStyle?: StyleObj,
   labelContainerStyle?: StyleObj,
-  labelSeparatorColor: string,
+  labelSeparatorCalignmentolor: string,
   labelStyle?: StyleObj,
   setBelow: bool,
   animationType?: "timing" | "spring",
@@ -48,6 +48,7 @@ type Props = {
   timingConfig?: { duration?: number },
   springConfig?: { tension?: number, friction?: number },
   opacityChangeDuration?: number,
+  alignment: string,
 };
 type State = {
   isModalOpen: bool,
@@ -94,6 +95,7 @@ class PopoverTooltip extends React.PureComponent<Props, State> {
     timingConfig: PropTypes.object,
     springConfig: PropTypes.object,
     opacityChangeDuration: PropTypes.number,
+    alignment: PropTypes.string,
   };
   static defaultProps = {
     buttonComponentExpandRatio: 1.0,
@@ -192,20 +194,25 @@ class PopoverTooltip extends React.PureComponent<Props, State> {
         inputRange: [0, 1],
         outputRange: [tooltipContainerX_final, tooltipContainerX_final],
       });
+
+      const headerHeightOffset = Platform.OS === 'android' ? StatusBar.currentHeight : 0
+
       const tooltipContainerY = this.state.tooltipContainerScale.interpolate({
         inputRange: [0, 1],
         outputRange: [
           tooltipContainerY_final + tooltipContainerHeight / 2 + 20,
-          tooltipContainerY_final,
+          tooltipContainerY_final - headerHeightOffset,
         ],
       });
+
       const buttonComponentContainerScale =
         this.state.tooltipContainerScale.interpolate({
           inputRange: [0, 1],
           outputRange: [1, this.props.buttonComponentExpandRatio],
         });
+      const tooltipContainerXFinal = this.props.alignment === 'left' ? 0 : tooltipContainerX_final
       const tooltipTriangleLeftMargin =
-        pageX + width / 2 - tooltipContainerX_final - 10;
+        pageX + width / 2 - tooltipContainerXFinal - 10;
       this.setState(
         {
           x: pageX,
@@ -226,8 +233,22 @@ class PopoverTooltip extends React.PureComponent<Props, State> {
   }
 
   render() {
+    // center aligned by default
+    let horizontalAlignment = {
+      left: this.state.tooltipContainerX
+    }
+    if (this.props.alignment === 'left') {
+      horizontalAlignment = {
+        left: this.props.alignment === 'left' ? 10 : 'auto'
+      }
+    } else if (this.props.alignment === 'right') {
+      horizontalAlignment = {
+        right: this.props.alignment === 'right' ? 10 : 'auto',
+      }
+    }
+
     const tooltipContainerStyle = {
-      left: this.state.tooltipContainerX,
+      ...horizontalAlignment,
       top: this.state.tooltipContainerY,
       transform: [
         { scale: this.state.tooltipContainerScale },
